@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.LuceneNet", "Integration.LuceneNet\Integration.LuceneNet.csproj", "{F2744A8B-08B2-4208-9051-2AF4E8841E92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.LuceneNet.Sample", "Integration.LuceneNet.Sample\Integration.LuceneNet.Sample.csproj", "{54E868F6-9151-4088-9302-2C48DC48280E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2744A8B-08B2-4208-9051-2AF4E8841E92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2744A8B-08B2-4208-9051-2AF4E8841E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2744A8B-08B2-4208-9051-2AF4E8841E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2744A8B-08B2-4208-9051-2AF4E8841E92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54E868F6-9151-4088-9302-2C48DC48280E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54E868F6-9151-4088-9302-2C48DC48280E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54E868F6-9151-4088-9302-2C48DC48280E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54E868F6-9151-4088-9302-2C48DC48280E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
