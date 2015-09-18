@@ -16,23 +16,23 @@ namespace JiebaNet.Integration.LuceneNet.Sample
 {
     public static class NewsSearcher
     {
-        private static string _luceneDir = "lucene_index";
+        private static readonly string LuceneDir = "lucene_index";
         private static FSDirectory _directoryTemp;
 
-        private static FSDirectory _directory
+        private static FSDirectory Directory
         {
             get
             {
                 if (_directoryTemp == null)
                 {
-                    _directoryTemp = FSDirectory.Open(new DirectoryInfo(_luceneDir));
+                    _directoryTemp = FSDirectory.Open(new DirectoryInfo(LuceneDir));
                 }
                 if (IndexWriter.IsLocked(_directoryTemp))
                 {
                     IndexWriter.Unlock(_directoryTemp);
                 }
 
-                var lockFilePath = Path.Combine(_luceneDir, "write.lock");
+                var lockFilePath = Path.Combine(LuceneDir, "write.lock");
                 if (File.Exists(lockFilePath))
                 {
                     File.Delete(lockFilePath);
@@ -41,6 +41,13 @@ namespace JiebaNet.Integration.LuceneNet.Sample
                 return _directoryTemp;
             }
         }
+
+        private static Analyzer GetAnalyzer()
+        {
+            return new JiebaAnalyzer();
+        }
+
+        #region Add & Update Index
 
         private static void AddToLuceneIndex(News data, IndexWriter writer)
         {
@@ -62,7 +69,7 @@ namespace JiebaNet.Integration.LuceneNet.Sample
             //var analyzer = new StandardAnalyzer(Version.LUCENE_30);
             var analyzer = GetAnalyzer();
 
-            using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+            using (var writer = new IndexWriter(Directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
             {
                 // replaces older entry if any
                 foreach (var sd in data)
@@ -74,21 +81,20 @@ namespace JiebaNet.Integration.LuceneNet.Sample
             }
         }
 
-        private static Analyzer GetAnalyzer()
-        {
-            return new JiebaAnalyzer();
-        }
-
         public static void UpdateLuceneIndex(News data)
         {
             UpdateLuceneIndex(new[] { data });
         }
 
+        #endregion
+
+        #region Clear Index
+
         public static void ClearLuceneIndexRecord(int recordId)
         {
             //var analyzer = new StandardAnalyzer(Version.LUCENE_30);
             var analyzer = GetAnalyzer();
-            using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+            using (var writer = new IndexWriter(Directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
             {
                 var searchQuery = new TermQuery(new Term("Id", recordId.ToString()));
                 writer.DeleteDocuments(searchQuery);
@@ -103,7 +109,7 @@ namespace JiebaNet.Integration.LuceneNet.Sample
             {
                 //var analyzer = new StandardAnalyzer(Version.LUCENE_30);
                 var analyzer = GetAnalyzer();
-                using (var writer = new IndexWriter(_directory, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED))
+                using (var writer = new IndexWriter(Directory, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED))
                 {
                     writer.DeleteAll();
 
@@ -118,16 +124,24 @@ namespace JiebaNet.Integration.LuceneNet.Sample
             return true;
         }
 
+        #endregion
+
+        #region Optimize Index
+
         public static void OptimizeLuceneIndex()
         {
             //var analyzer = new StandardAnalyzer(Version.LUCENE_30);
             var analyzer = GetAnalyzer();
-            using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+            using (var writer = new IndexWriter(Directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
             {
                 analyzer.Close();
                 writer.Optimize();
             }
         }
+
+        #endregion
+
+        #region Mappers
 
         private static News MapDataToModel(Document doc)
         {
@@ -149,9 +163,13 @@ namespace JiebaNet.Integration.LuceneNet.Sample
             return hits.Select(hit => MapDataToModel(searcher.Doc(hit.Doc))).ToList();
         }
 
+        #endregion
+
+        #region Search
+
         private static string GetKeyWordsSplitBySpace(string keywords, JiebaTokenizer tokenizer)
         {
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
 
             var words = tokenizer.Tokenize(keywords);
 
@@ -190,7 +208,7 @@ namespace JiebaNet.Integration.LuceneNet.Sample
                 return new List<News>();
             }
 
-            using (var searcher = new IndexSearcher(_directory, false))
+            using (var searcher = new IndexSearcher(Directory, false))
             {
                 var hitsLimit = 1000;
                 //var analyzer = new StandardAnalyzer(Version.LUCENE_30);
@@ -243,7 +261,7 @@ namespace JiebaNet.Integration.LuceneNet.Sample
             kwords = GetKeyWordsSplitBySpace(kwords, new JiebaTokenizer(new JiebaSegmenter(), kwords));
 
             var terms = kwords.Trim().Replace("-", " ").Split(' ')
-                .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim());
+                .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*");
             input = string.Join(" ", terms);
 
             return SearchQuery(input, fieldName);
@@ -254,15 +272,21 @@ namespace JiebaNet.Integration.LuceneNet.Sample
             return string.IsNullOrEmpty(input) ? new List<News>() : SearchQuery(input, fieldName);
         }
 
+        #endregion
+
+        /// <summary>
+        /// All the data indexed.
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<News> GetAllData()
         {
-            if (!System.IO.Directory.EnumerateFiles(_luceneDir).Any())
+            if (!System.IO.Directory.EnumerateFiles(LuceneDir).Any())
             {
                 return new List<News>();
             }
 
-            var searcher = new IndexSearcher(_directory, false);
-            var reader = IndexReader.Open(_directory, false);
+            var searcher = new IndexSearcher(Directory, false);
+            var reader = IndexReader.Open(Directory, false);
             var docs = new List<Document>();
             var term = reader.TermDocs();
 

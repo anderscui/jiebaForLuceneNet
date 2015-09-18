@@ -20,7 +20,7 @@ namespace JiebaNet.Integration.LuceneNet.Sample
             var data = NewsRepository.GetAll();
             NewsSearcher.UpdateLuceneIndex(data);
 
-            var results = NewsSearcher.Search("动物");
+            var results = NewsSearcher.Search("进");
             foreach (var result in results)
             {
                 Console.WriteLine(result);

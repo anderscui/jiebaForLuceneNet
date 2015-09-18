@@ -1,7 +1,13 @@
 ### jiebaForLuceneNet
 Integrate jieba.NET segmenter with Lucene.NET.
 
-### 一、若对Lucene.NET不甚熟悉，请先看：
+### 一、jiebaForLuceneNet的使用
+
+* `JiebaAnalyzer`：与Lucene.NET集成的主接口，添加索引和搜索时使用此类的实例作为analyzer参数
+* `JiebaTokenizer`：为JiebaAnalyzer提供分词功能
+* `Integration.LuceneNet.Sample`项目中有示例，演示如何通过jieba分词添加索引和搜索
+
+### 二、若对Lucene.NET不甚熟悉，请先看：
 
 #### Lucene.NET的基本用法
 
@@ -21,8 +27,3 @@ Integrate jieba.NET segmenter with Lucene.NET.
 
 * http://luke.codeplex.com/releases/view/82033
 
-### 二、jiebaForLuceneNet的使用
-
-* `JiebaAnalyzer`：与Lucene.NET集成的主接口
-* `JiebaTokenizer`：为JiebaAnalyzer用于分词
-* `Integration.LuceneNet.Sample`项目中有示例，演示如何通过jieba分词添加索引和搜索
