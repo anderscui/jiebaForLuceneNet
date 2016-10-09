@@ -35,11 +35,11 @@
     </Reference>
     <Reference Include="JiebaNet.Analyser, Version=0.37.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\jieba.NET.0.38.1\lib\net45\JiebaNet.Analyser.dll</HintPath>
+      <HintPath>..\packages\jieba.NET.0.38.2\lib\net45\JiebaNet.Analyser.dll</HintPath>
     </Reference>
     <Reference Include="JiebaNet.Segmenter, Version=0.38.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\jieba.NET.0.38.1\lib\net45\JiebaNet.Segmenter.dll</HintPath>
+      <HintPath>..\packages\jieba.NET.0.38.2\lib\net45\JiebaNet.Segmenter.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
